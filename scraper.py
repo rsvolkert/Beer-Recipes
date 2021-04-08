@@ -55,4 +55,4 @@ beer_df.Avg_Rating = pd.to_numeric(beer_df.Avg_Rating)
 beer_df.Reviews = beer_df.Reviews.apply(lambda x : commasep(x))
 beer_df.Ratings = beer_df.Ratings.apply(lambda x : commasep(x))
 
-beer_df.to_csv('Ratings.csv', index=False)
+beer_df.to_csv('Data/Ratings.csv', index=False)
