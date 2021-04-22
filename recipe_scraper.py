@@ -49,19 +49,7 @@ for pg_idx in range(1, page_num+1):
             else:
                 if stat.find('strong'):
                     entry = stat.find('strong').text
-                    
-                    if re.search('\d\s[a-zA-Z]', entry):
-                        stat = float(entry.split()[0])
-                        units = entry.split()[1]
-                        
-                        stats[name + ' ' + '(' + units + ')'] = stat
-                    elif re.search('%', entry):
-                        stats[name] = float(entry.strip().strip('%')) / 100
-                    else:
-                        try:
-                            stats[name] = float(entry.strip())
-                        except ValueError:
-                            stats[name] = entry.strip()
+                    stats[name] = entry.strip()
                         
         for brewpart in recipe_soup.find_all('div', {'class':'brewpart'}):
             part_id = brewpart.get('id')
