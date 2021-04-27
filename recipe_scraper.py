@@ -76,6 +76,10 @@ for pg_idx in range(2608, page_num+1):
     
     for recipe in hrefs:
         recipes.append(get_recipe(recipe))
-                
+
+all_recipes = pd.DataFrame(recipes)
+trim_recipes = all_recipes.loc[all_recipes.Reviews > 0]
+trim_recipes = trim_recipes.to_dict('records')
+
 with open('Data/recipes.json', 'w') as out:
-    json.dump(recipes, out)
+    json.dump(trim_recipes, out)
