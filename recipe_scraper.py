@@ -77,5 +77,5 @@ for pg_idx in range(2608, page_num+1):
     for recipe in hrefs:
         recipes.append(get_recipe(recipe))
                 
-with open('Data/recipes.json') as out:
-    json.dumps(recipes, out)
+with open('Data/recipes.json', 'w') as out:
+    json.dump(recipes, out)
