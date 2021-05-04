@@ -260,3 +260,5 @@ recipes.dropna(subset=['hops'], inplace=True)
 recipes['ingredients'] = recipes.apply(generate_ingredients, axis=1)
 recipes['recipe'] = recipes.apply(generate_recipe, axis=1)
 
+if __name__ == '__main__':
+    recipes.to_csv('Data/recipes.csv', index=False)
