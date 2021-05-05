@@ -1,0 +1,110 @@
+---
+title: "Using Neural Nets to Create Beer Recipies"
+author: "Ryan Volkert and Paul Chong"
+date: "5/6/2021"
+header-includes:
+    - \usepackage{setspace}\doublespacing
+output:
+  pdf_document: default
+  word_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(ggplot2)
+library(readr)
+```
+\newcommand{\hstart}{ \colorlet{shadecolor}{orange!20}
+\begin{shaded} }
+\newcommand{\hstop}{  \end{shaded} \colorlet{shadecolor}{gray!10}}
+
+
+# Abstract
+
+The world of beer brewing is deep and extensive, both in time and number of recipes available. Colorado is home to the most breweries in the United States (with Fort Collins having the most in a Colorado city). As beer enthusiasts ourselves, our team wanted to see if we were able to replicate the perfect beer recipe based off of previous brews. With a little help from data science and use of neural networks, we wanted to create the perfect beer based off of past recipes and their respective ratings. In this paper, we will go over the data and how we were able to extract recipes and ratings from various websites. We will then go over the different outside inspirations for our paper. Finally, we will explain the methods used to implement our neural net and provide our final results. 
+
+# Introduction
+
+Deep learning has left a deep impact on the world by solving real-world problems which would have otherwise taken decades to discover or complete. There has been a sharp increase in the use of deep learning thanks to more powerful hardware, larger datasets, and an increase in the population of programmers. These effects have allowed humans to create vast advancements in not only the STEM field, but also the creative world. So we decided to explore the world of beer making, with the help of neural networks.
+
+
+
+```{r, include=FALSE}
+# To include the data for beer recipes
+ratings <- read_csv("~/DSCI478/Beer-Recipes/Data/Ratings.csv")
+```
+
+
+```{r}
+# Average ratings of all the beers (out of 5)
+mean(ratings$Avg_Rating)
+```
+
+
+# Problem Formulation
+
+With millions of different beer recipes in existence, we thought that there was too much "noise" for everyone to try all the recipes. We thought that there were a lot more beers that tasted bad rather than good. So we wanted to see if we can eliminate the noise a little by creating the best recipe for each type of beer (IPA, sour, porter, etc.).
+
+# Data
+
+We scrapped our data from different websites. We wrote a scraper (in Python, with the inspiration of another scraper found on Github) to grab all the recipes from a website called "Brewer's Friend". We compiled the scraped data into a .json file. Since the size of the compiled dataset was well over 100 MB, we had to do a little bit of data wrangling to reduce the size of the dataset. We decided to remove any observations with a limited number of reviews, as it would be difficult for the neural net to determine if certain ingredients would be a good or bad addition to its "perfect" recipe without an adequate number of customer feedback. We eventually converted the recipes to a .csv file and got the size down to around 13 MB, which would contain plenty of observations for the neural net to learn from. The "recipe.csv" dataset contains different beers and their recipes, where each observation (beer recipe) reported method, boil time, hop utilization, and a number of other columns that contain different steps to combine the different ingredients together. 
+
+```{r}
+# Average ratings of all the beers 
+mean(ratings$Avg_Rating)
+```
+
+The "Ratings.csv" contains different beers and their average rating. Each observation reports the type, ABV, average rating, reviews, number of ratings given, and the brewery. We also decided to create a parameter to clean out any observations that didn't have enough reviews or number of ratings. It is from these 250 different recipes of beer that we will be creating perfect recipes. 
+
+
+
+# Neural Network/Modeling
+
+We decided to approach this problem through the lens of deep learning to create our own recipes, specifically a neural network model. This inspiration came from our initial research on this project where we found a couple of recipes online that utilized neural networks to create their own perfect recipes for other foods (such as brownies, sandwiches, cookies, etc.). In these recipes however, we found that come of them included certain ingredients where 
+
+**for Ryan to finish**
+
+# Conclusion
+
+We have included the inspiration for our study, along with a detailed explanation of how we collected our data and cleaned it to help fit our model better... **explain the outcome of the neural net**
+
+There are a couple problems our group faced in this project that we hope to fix if we were to run it again. We were initially given a couple datasets from a professor at Colorado State University's fermentation department to play around with. However, we found that the dataset didn't have enough observations to feed into the neural network. This is understandable, as Colorado State doesn't exactly have an extensive history of brewing and a large enough facility to test a number of different combinations. In the future, we can also try and communicate with other universities to see if we can utilize their recipes as well (for research purposes). The other problem that we faced is that there is no way to actually verify if the recipe we created actually worked. Although we have our suspicions that our recipes wouldn't work well anyways, it would take months for these recipes to actually be brewed. Regardless of the time constraint at the end of the semester, we might ask the fermentation department for their input on the feasibility of the recipe. 
+
+Overall, we believe that we completed our objective of creating a recipe based off the "best" ingredients and methods from other popular breweries. 
+
+
+# Bibliography
+**Must include bibliography**
+
+1. Homebrew Beer Recipes: Browse 200,000+ at Brewer's Friend. Brewer's Friend Beer Brewing Software. (2021). https://www.brewersfriend.com/homebrew-recipes/. 
+
+2. BrewingTV, (2015, August 20), All-Grain Brewing 101: The Basics
+[Video]. YouTube. https://www.youtube.com/watch?v=AcRXjdlcvKY
+
+3. How to Brew in a Bag (BIAB). Homebrew Supply. (2021). https://homebrewsupply.com/learn/how-to-brew-in-a-bag-biab/. 
+
+4. Brewing For Beginners - Brewer's Friend. Brewer's Friend | Brewer's Friend is a complete homebrew beer recipe designer with brewing calculators, brew day planner, journal &amp; more. Helping you brew your best, every time! (2019, September 18). https://www.brewersfriend.com/brewing-for-beginners/. 
+
+5. Britz, D. (2016, July 8). Recurrent Neural Networks Tutorial, Part 1 – Introduction to RNNs. WildML. http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/. 
+
+6. Bojar, D. (2019, January 5). Generating Novel Cocktail Recipes with a Specific Style through Recurrent Neural Networks. Medium. https://towardsdatascience.com/generating-novel-cocktail-recipes-with-a-specific-style-through-recurrent-neural-networks-4339e9168404. 
+
+7. Trekhleb, O. (n.d.). Generating cooking recipes using TensorFlow and LSTM Recurrent Neural Network: A step-by-step guide. KDnuggets. https://www.kdnuggets.com/2020/07/generating-cooking-recipes-using-tensorflow.html. 
+
+8. Jia Derek. (2019, April 11). AI_Generated_Recipes. https://github.com/derekdjia/AI_Generated_Recipes.
+
+9. Razvan Pascanu, Caglar Gulcehre, Kyunghyun Cho, Yoshua Bengio. How to Construct Deep Recurrent Neural Networks. Department of Information and Computer Sience, Aalto University School of Medicine, 2014.
+
+10. Ilya Sutskever. Training Recurrent Neural Networks. Graduate Department of Computer Science, University of Toronto, 2013.
+
+
+
+
+
+
