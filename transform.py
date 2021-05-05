@@ -184,8 +184,20 @@ def generate_recipe(recipe):
     def method_specific(recipe):
         scheduling = schedule(recipe)
         
-        pre_step = 'Santize any equipment that will be in contact with the brew after the boil process. This is very important as we do not want to introduce foreign bacteria to the brew. Brewing santitizer is widely avaialble and labeled with instructions.'
-        
+        header = f"""NAME
+{recipe['Name']}
+
+STYLE
+{recipe['Style']}
+
+METHOD
+{recipe['Method']}
+
+{recipe['ingredients']}
+
+INSTRUCTIONS
+Santize any equipment that will be in contact with the brew after the boil process. This is very important as we do not want to introduce foreign bacteria to the brew. Brewing santitizer is widely avaialble and labeled with instructions."""
+                
         base = f"""
    Bring the wort to a rolling boil. Hold there for {recipe['Boil Time']}.
    {print_schedule(scheduling, 'Boil')}\n{print_schedule(scheduling, 'Boil Primary')}\n{print_schedule(scheduling, 'Boil Secondary')}\n{print_schedule(scheduling, 'Aroma')}\n{print_schedule(scheduling, 'Hop Stand')}\n{print_schedule(scheduling, 'Whirlpool')}{print_schedule(scheduling, 'Hopback')}""".strip() + f"""
@@ -202,7 +214,7 @@ def generate_recipe(recipe):
 6. ENJOY!"""
         
         if recipe['Method'] == 'All Grain':
-            return pre_step + f"""
+            return header + f"""
 
 1. THE MASH
    Start by milling your grain.
@@ -217,7 +229,7 @@ def generate_recipe(recipe):
 """ + base
 
         elif recipe['Method'] == 'BIAB':
-            return pre_step + f"""
+            return header + f"""
         
  1. THE MASH
    Heat {recipe['Pre Boil Size']} of water to about 160 degrees in your brew kettle.
@@ -229,7 +241,7 @@ def generate_recipe(recipe):
 """ + base
 
         elif recipe['Method'] == 'Partial Mash':
-            return pre_step + f"""
+            return header + f"""
         
 1. THE MASH
    Crush your grain, putting it in your grain bag.
@@ -242,7 +254,7 @@ def generate_recipe(recipe):
  """ + base
  
         else:
-             return pre_step + f"""
+             return header + f"""
          
 1. THE MASH
    Begin heating {recipe['Pre Boil Size']} of water in your brew kettle.
