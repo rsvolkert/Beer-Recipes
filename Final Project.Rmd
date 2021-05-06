@@ -19,6 +19,11 @@ library(knitr)
 library(tidyverse)
 library(ggplot2)
 library(readr)
+library(reticulate)
+```
+
+```{r}
+use_python('C:/Users/rvolk/anaconda3/python.exe')
 ```
 \newcommand{\hstart}{ \colorlet{shadecolor}{orange!20}
 \begin{shaded} }
@@ -27,25 +32,19 @@ library(readr)
 
 # Abstract
 
-The world of beer brewing is deep and extensive, both in time and number of recipes available. Colorado is home to the most breweries in the United States (with Fort Collins having the most in a Colorado city). As beer enthusiasts ourselves, our team wanted to see if we were able to replicate the perfect beer recipe based off of previous brews. With a little help from data science and use of neural networks, we wanted to create the perfect beer based off of past recipes and their respective ratings. In this paper, we will go over the data and how we were able to extract recipes and ratings from various websites. We will then go over the different outside inspirations for our paper. Finally, we will explain the methods used to implement our neural net and provide our final results. 
+The world of brewing is deep and extensive, both in time and number of recipes available. Colorado is home to the most breweries in the United States (with Fort Collins having the most in a Colorado city). As beer enthusiasts ourselves, our team wanted to see if we were able to replicate the perfect beer recipe based off of previous brews. With a little help from data science and use of neural networks, we wanted to create the perfect beer based off of past recipes and their respective ratings. In this paper, we will go over the data and how we were able to extract recipes from the web. We will then go over the inspirations for our paper. Finally, we will explain the methods used to implement our neural net and provide our final results. 
+
+\newpage
 
 # Introduction
 
-Deep learning has left a deep impact on the world by solving real-world problems which would have otherwise taken decades to discover or complete. There has been a sharp increase in the use of deep learning thanks to more powerful hardware, larger datasets, and an increase in the population of programmers. These effects have allowed humans to create vast advancements in not only the STEM field, but also the creative world. So we decided to explore the world of beer making, with the help of neural networks.
+Deep learning has left an impact on the world by solving real-world problems which would have otherwise taken decades to discover or complete. There has been a sharp increase in the use of deep learning thanks to more powerful hardware, larger datasets, and an increase in the population of programmers. These effects have allowed humans to create vast advancements in not only the STEM field, but also the creative world. So we decided to explore the world of beer making, with the help of neural networks.
 
+Using deep learning in for generating recipes is not uncommon. There are several tutorials and repositories online that go through this process. Cocktail recipes and cooking recipes have been generated using recurrent neural networks (Bojar, 2019; Trekhleb, 2020). This specific neural net is useful for this task because of how it makes use of sequential information -- perfect for understanding language (Pascanu et al., 2014).
 
+Brewing is a complex problem. There are several methods of brewing, each with different instructions. Every brew involves some method of getting malt into water, boiling to add hops, and fermenting for a number of weeks (Brewing For Beginners, 2019). The methods vary in how the malt is infused with the water, making it wort.
 
-```{r, include=FALSE}
-# To include the data for beer recipes
-ratings <- read_csv("~/DSCI478/Beer-Recipes/Data/Ratings.csv")
-```
-
-
-```{r}
-# Average ratings of all the beers (out of 5)
-mean(ratings$Avg_Rating)
-```
-
+In all grain brewing, malt is added by steeping grains in hot, but not boiling water, then rinsing them in a process called sparging (BrewingTV, 2015). This is the most complex method, but it can offer the most complex flavor profile. Brewing in a bag (BIAB) is a simpler process where grains are added to a bag in the water (How to Brew In A Bag, 2021). Then there is extract only brewing. This is the simplest method, as you add malt extract directly to your boiling water (Brewing For Beginners, 2019). All of these methods are present in our data, making it a varied and complex set.
 
 # Problem Formulation
 
@@ -53,22 +52,76 @@ With millions of different beer recipes in existence, we thought that there was 
 
 # Data
 
-We scrapped our data from different websites. We wrote a scraper (in Python, with the inspiration of another scraper found on Github) to grab all the recipes from a website called "Brewer's Friend". We compiled the scraped data into a .json file. Since the size of the compiled dataset was well over 100 MB, we had to do a little bit of data wrangling to reduce the size of the dataset. We decided to remove any observations with a limited number of reviews, as it would be difficult for the neural net to determine if certain ingredients would be a good or bad addition to its "perfect" recipe without an adequate number of customer feedback. We eventually converted the recipes to a .csv file and got the size down to around 13 MB, which would contain plenty of observations for the neural net to learn from. The "recipe.csv" dataset contains different beers and their recipes, where each observation (beer recipe) reported method, boil time, hop utilization, and a number of other columns that contain different steps to combine the different ingredients together. 
+As there is not a readily available beer recipe database, we had to scrape the ingredients and formulate our own recipes. We wrote a scraper and headed to Brewer's Friend to gather our data. After compiling the data, we found it to be over 100 MB, much too large for our computing power. We deciced to remove any recipes that did not have at least one review on the site, believing that the unreviewed recipes could not be of much repute. We got the size down to around 13 MB, which would contain plenty of observations for the neural net to learn from. The "recipe.csv" dataset contains different beers and their recipes, where each observation (beer recipe) reported method, boil time, hop utilization, and a number of other columns that contain different steps to combine the different ingredients together.
+
+Since it is important to have an understanding of the model's behavior before compilation, we checked into the brewing methods to see if there was an even spread.
 
 ```{r}
-# Average ratings of all the beers 
-mean(ratings$Avg_Rating)
+recipes <- read_csv('Data/recipes.csv')
+
+recipes %>%
+  group_by(Method) %>%
+  summarize(Count = n()) %>%
+  ggplot(aes(Method, Count)) +
+  geom_col() +
+  ggtitle('Count of Recipes per Brewing Method')
 ```
 
-The "Ratings.csv" contains different beers and their average rating. Each observation reports the type, ABV, average rating, reviews, number of ratings given, and the brewery. We also decided to create a parameter to clean out any observations that didn't have enough reviews or number of ratings. It is from these 250 different recipes of beer that we will be creating perfect recipes. 
+Seeing that the recipes are dominated by all grain is not surprising. Most brewers of the caliber to post reputatble recipes will have all grain rigs and be utilizing the freedom that it gives them. This is a problem for the neural network, as it will disproportionately generate all grain recipes, regardless of which style the ingredients call for.
 
+We also wanted to see if brewers were making a specific kind of beer more often. There turned out to be over 100 unique beer styles, but that is because every variation of a style is considered its own style in the data.
 
+```{r}
+recipes %>%
+  group_by(Style) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  slice_head(n=5) %>%
+  ggplot(aes(reorder(Style, -Count), Count)) +
+  geom_col() +
+  ggtitle('Top 5 Styles') +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) +
+  xlab('Style')
+```
+
+A few styles did stand above the rest. A sizeable portion of recipes are American IPAs. In fact, four out of the top five styles are some kind of pale ale. Since this is a craft brewing site, this is unsurprising. Anecdotally, craft brewers are always making their own style of pale ale. This still can have an effect on the results. Recipes might be more likely to have ingredients and follow methods that correspond with brewing pale ales over anything else.
+
+Finally, we must discuss the structure of our recipes. They were hand-written to have a predictable format, using the ingredients data. They are of the following form:
+
+```{python}
+print("""NAME
+(beer name)
+
+STYLE
+(beer style)
+
+METHOD
+(brewing method)
+
+INGREDIENTS
+
+  FERMENTABLES
+    (list of malts and barleys and the amounts of each)
+    
+  HOPS
+    (list of hops, amounts, usage, and time)
+    
+  OTHER
+    (if there are other ingredients)
+    
+INSTRUCTIONS
+(method-specific brewing instructions)""")
+```
+
+This form is replicated in the model output.
 
 # Neural Network/Modeling
 
-We decided to approach this problem through the lens of deep learning to create our own recipes, specifically a neural network model. This inspiration came from our initial research on this project where we found a couple of recipes online that utilized neural networks to create their own perfect recipes for other foods (such as brownies, sandwiches, cookies, etc.). In these recipes however, we found that come of them included certain ingredients where 
+The approach for our model came from the methods outlined by Oleksii Trekhleb (2020), Ilya Sutskever (2013), and Daniel Bojar (2019). We used a recurrent neural network with long short-term memory units. This approach is consistent accross similar problems, so we decided to stick with it. After creating the model, and running for approximated four hours and 73 epochs, it was trained. With a user-defined name, style, and brewing method, we are able to generate an original beer recipe, for better or for worse.
 
-**for Ryan to finish**
+```{r}
+source_python('./generate_recipe.py')
+```
 
 # Conclusion
 
@@ -78,6 +131,7 @@ There are a couple problems our group faced in this project that we hope to fix 
 
 Overall, we believe that we completed our objective of creating a recipe based off the "best" ingredients and methods from other popular breweries. 
 
+\newpage
 
 # Bibliography
 **Must include bibliography**
@@ -87,7 +141,7 @@ Overall, we believe that we completed our objective of creating a recipe based o
 2. BrewingTV, (2015, August 20), All-Grain Brewing 101: The Basics
 [Video]. YouTube. https://www.youtube.com/watch?v=AcRXjdlcvKY
 
-3. How to Brew in a Bag (BIAB). Homebrew Supply. (2021). https://homebrewsupply.com/learn/how-to-brew-in-a-bag-biab/. 
+3. How to Brew in a Bag (BIAB). (2021) Homebrew Supply. https://homebrewsupply.com/learn/how-to-brew-in-a-bag-biab/. 
 
 4. Brewing For Beginners - Brewer's Friend. Brewer's Friend | Brewer's Friend is a complete homebrew beer recipe designer with brewing calculators, brew day planner, journal &amp; more. Helping you brew your best, every time! (2019, September 18). https://www.brewersfriend.com/brewing-for-beginners/. 
 
@@ -95,16 +149,8 @@ Overall, we believe that we completed our objective of creating a recipe based o
 
 6. Bojar, D. (2019, January 5). Generating Novel Cocktail Recipes with a Specific Style through Recurrent Neural Networks. Medium. https://towardsdatascience.com/generating-novel-cocktail-recipes-with-a-specific-style-through-recurrent-neural-networks-4339e9168404. 
 
-7. Trekhleb, O. (n.d.). Generating cooking recipes using TensorFlow and LSTM Recurrent Neural Network: A step-by-step guide. KDnuggets. https://www.kdnuggets.com/2020/07/generating-cooking-recipes-using-tensorflow.html. 
+7. Trekhleb, O. (2020, July). Generating cooking recipes using TensorFlow and LSTM Recurrent Neural Network: A step-by-step guide. KDnuggets. https://www.kdnuggets.com/2020/07/generating-cooking-recipes-using-tensorflow.html. 
 
-8. Jia Derek. (2019, April 11). AI_Generated_Recipes. https://github.com/derekdjia/AI_Generated_Recipes.
+8. Pascanu, R., Gulcehre, C., Cho, K., Bengio, Y. (2014) How to Construct Deep Recurrent Neural Networks. Department of Information and Computer Sience, Aalto University School of Medicine.
 
-9. Razvan Pascanu, Caglar Gulcehre, Kyunghyun Cho, Yoshua Bengio. How to Construct Deep Recurrent Neural Networks. Department of Information and Computer Sience, Aalto University School of Medicine, 2014.
-
-10. Ilya Sutskever. Training Recurrent Neural Networks. Graduate Department of Computer Science, University of Toronto, 2013.
-
-
-
-
-
-
+9. Sutskever, I. (2013) Training Recurrent Neural Networks. Graduate Department of Computer Science, University of Toronto.
