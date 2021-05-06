@@ -85,8 +85,6 @@ simplified = build_model(
 simplified.set_weights(model.get_weights())
 simplified.build(tf.TensorShape([simple_size, None]))
 
-simplified.summary()
-
 def generate_recipe(model, NAME, STYLE, METHOD, num_generate=1000, temperature=1.0):
   padded_start_string = f"""{STOP_NAME}
 {NAME}
