@@ -182,6 +182,8 @@ Santize any equipment that will be in contact with the brew after the boil proce
 
 There are obvious issues with the generated recipe. For instance, the hops listed as ingredients are not necessarily the hops that are used in the isntructions. The grains for this recipe seem reasonable, but some of the other recipies were not. We also found that the yeast type given was not always the yeast type used. These are discrepancies that would need to be sorted out by the user or by a larger training set. Filtering the data down to 3,000 recipes might not have been enough to produce reliable results, especially since they were skewed towards all grain American IPAs. Despite its imperfections, we have successfully generated a recipe using a recurrent neural network. It would take a multitude of user filtering and interpretation that these recipies are not likely useful in a real-life setting, yet. With a lot of fine-tuning and a larger dataset, we may yet be able to generate useable brewing recipies.
 
+Our code can be found at https://github.com/rsvolkert/Beer-Recipes.
+
 \newpage
 
 # Bibliography
