@@ -11,7 +11,7 @@ output:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r, include=FALSE}
@@ -56,7 +56,7 @@ As there is not a readily available beer recipe database, we had to scrape the i
 
 Since it is important to have an understanding of the model's behavior before compilation, we checked into the brewing methods to see if there was an even spread.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 recipes <- read_csv('Data/recipes.csv')
 
 recipes %>%
@@ -71,7 +71,7 @@ Seeing that the recipes are dominated by all grain is not surprising. Most brewe
 
 We also wanted to see if brewers were making a specific kind of beer more often. There turned out to be over 100 unique beer styles, but that is because every variation of a style is considered its own style in the data.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 recipes %>%
   group_by(Style) %>%
   summarize(Count = n()) %>%
@@ -86,71 +86,121 @@ recipes %>%
 
 A few styles did stand above the rest. A sizeable portion of recipes are American IPAs. In fact, four out of the top five styles are some kind of pale ale. Since this is a craft brewing site, this is unsurprising. Anecdotally, craft brewers are always making their own style of pale ale. This still can have an effect on the results. Recipes might be more likely to have ingredients and follow methods that correspond with brewing pale ales over anything else.
 
-Finally, we must discuss the structure of our recipes. They were hand-written to have a predictable format, using the ingredients data. They are of the following form:
-
-```{python}
-print("""NAME
-(beer name)
-
-STYLE
-(beer style)
-
-METHOD
-(brewing method)
-
-INGREDIENTS
-
-  FERMENTABLES
-    (list of malts and barleys and the amounts of each)
-    
-  HOPS
-    (list of hops, amounts, usage, and time)
-    
-  OTHER
-    (if there are other ingredients)
-    
-INSTRUCTIONS
-(method-specific brewing instructions)""")
-```
-
-This form is replicated in the model output.
+Finally, we must discuss the structure of our recipes. They were hand-written to have a predictable format, using the ingredients data. They take the form of a beer name, followed by its style, then its brewing methods, its ingredients, and finally, the instructions. This format is reproduced in the final output.
 
 # Neural Network/Modeling
 
 The approach for our model came from the methods outlined by Oleksii Trekhleb (2020), Ilya Sutskever (2013), and Daniel Bojar (2019). We used a recurrent neural network with long short-term memory units. This approach is consistent accross similar problems, so we decided to stick with it. After creating the model, and running for approximated four hours and 73 epochs, it was trained. With a user-defined name, style, and brewing method, we are able to generate an original beer recipe, for better or for worse.
 
-```{r}
-source_python('./generate_recipe.py')
-```
+There is also the issue of temperature. Temperature is a measure of how closely we want the results to resemble our data. A temperature of 1.0 will produce interesting results, but it might not make the most sense. Temperatures closer to zero do not allow the model to be as creative. Here is some sample output for an all grain American IPA named Outlet IPA at a temperature of 0.2.
+
+###########################\newline
+Attempt: Outlet IPA + 0.2
+
+NAME \newline
+Outlet IPA
+
+STYLE \newline
+American IPA
+
+METHOD \newline
+All Grain 
+
+INGREDIENTS
+    
+\quad FERMENTABLES
+  
+\quad\quad 3 lb American - Pale 2-Row\newline
+\null\quad\quad 1 lb American - Caramel / Crystal 20L\newline
+\null\quad\quad 0.50 lb American - Carapils (Dextrine Malt)\newline
+\null\quad\quad 0.50 lb American - Caramel / Crystal 120L
+
+\quad HOPS
+	
+\quad\quad 1 oz Cascade, Pellet, Boil, 60 min\newline
+\null\quad\quad 1 oz Cascade, Pellet, Boil, 15 min\newline
+\null\quad\quad 1 oz Cascade, Pellet, Boil, 10 min\newline
+\null\quad\quad 1 oz Cascade, Pellet, Boil, 0 min
+
+\quad OTHER
+	
+\quad\quad 1 tsp Irish Moss, Fining, Boil, 15 min.
+
+\quad YEAST
+	
+\quad\quad Wyeast - American Ale 1056
+
+INSTRUCTIONS
+
+Santize any equipment that will be in contact with the brew after the boil process. This is very important as we do not want to introduce foreign bacteria to the brew. Brewing santitizer is widely avaialble and labeled with instructions.
+
+1. THE MASH
+
+   Start by milling your grain.\newline
+   Heat 1.3 quarts of water for every pound of grain to 145-162 degrees, and add it to the mash tun. Add 1 tsp Calcium Chloride (dihydrate), 1.25 tsp Gypsum,  and 1 tsp Lactic acid.\newline
+   Add the grains and stir to make sure that there are no clumps. Make sure that the mash reaches a temperature of 148-158 degrees.\newline
+   Allow the mash to rest for about one hour.\newline
+   After the rest, raise the mash temperature to 170 degrees by adding near boiling water. Stir well. Leave the mash for another 10 minutes.\newline
+   Begin heating the sparge water to 175 degrees.\newline
+   Recirculate the mash by siphoning it between two containers and pouring them back down the sides of the mash tun until the wort appears clear.\newline
+   Disperse the sparge water over the top of the grain bed while siphoning the wort into the boil kettle at equal rates (1 quart per minute) until you reach 7.5 gallons.
+   
+2. THE BOIL
+
+   Bring the wort to a rolling boil. Hold there for 60 min.\newline
+   With 60 min left, Boil 0.50 oz of Columbus hops.\newline
+   With 10 min left, Boil 1 oz of Cascade hops.\newline
+   With 5 min left, Boil 1 oz of Cascade hops.\newline
+   With 5 min left, Boil 1 each of whirlfloc.\newline
+   Complete the following after the boil but before chilling.\newline
+   With 30 min left, Whirlpool at 180 °F 1 oz of Centennial hops.\newline
+   With 30 min left, Whirlpool at 180 °F 1 oz of Spalt Select hops.\newline
+   With 30 min left, Whirlpool at 180 °F 1 oz of Spalt Select hops.\newline
+   With 20 min left, Whirlpool at 180 °F 1 oz of Crystal hops.\newline
+   With 0 min left, Whirlpool at 180 °F 1 oz of Spalt Select hops.\newline
+   With 0 min left, Whirlpool at 180 °F 1 oz of Cascade hops.\newline
+   
+3. THE CHILL
+
+   Chill the wort to around room tempterature. The method for this depends on your volume.
+   
+4. FERMENTATION
+
+   Pour the wort into your fermentation vessel. Add water to reach 5.5 gallons Agitate the mixture to bring oxygen into the wort.\newline
+   Add your Wyeast - American Ale 1056 to the wort, following the instructions given by the yeast manufacturer.\newline
+   Cover your fermenter, fill the airlock to the line with water, and place the airlock in hole in the fermenter lid.\newline
+   Fermentation times vary by style of beer. Make sure that you are fermenting for enough time.\newline
+   
+5. SERVING VESSEL
+
+   You can choose to bottle or keg your beer. Carbonation instructions vary by choice, so make sure you are equipped to carbonate.
+   
+6. ENJOY!\newline
+###########################
 
 # Conclusion
 
-We have included the inspiration for our study, along with a detailed explanation of how we collected our data and cleaned it to help fit our model better... **explain the outcome of the neural net**
-
-There are a couple problems our group faced in this project that we hope to fix if we were to run it again. We were initially given a couple datasets from a professor at Colorado State University's fermentation department to play around with. However, we found that the dataset didn't have enough observations to feed into the neural network. This is understandable, as Colorado State doesn't exactly have an extensive history of brewing and a large enough facility to test a number of different combinations. In the future, we can also try and communicate with other universities to see if we can utilize their recipes as well (for research purposes). The other problem that we faced is that there is no way to actually verify if the recipe we created actually worked. Although we have our suspicions that our recipes wouldn't work well anyways, it would take months for these recipes to actually be brewed. Regardless of the time constraint at the end of the semester, we might ask the fermentation department for their input on the feasibility of the recipe. 
-
-Overall, we believe that we completed our objective of creating a recipe based off the "best" ingredients and methods from other popular breweries. 
+There are obvious issues with the generated recipe. For instance, the hops listed as ingredients are not necessarily the hops that are used in the isntructions. The grains for this recipe seem reasonable, but some of the other recipies were not. We also found that the yeast type given was not always the yeast type used. These are discrepancies that would need to be sorted out by the user or by a larger training set. Filtering the data down to 3,000 recipes might not have been enough to produce reliable results, especially since they were skewed towards all grain American IPAs. Despite its imperfections, we have successfully generated a recipe using a recurrent neural network. It would take a multitude of user filtering and interpretation that these recipies are not likely useful in a real-life setting, yet. With a lot of fine-tuning and a larger dataset, we may yet be able to generate useable brewing recipies.
 
 \newpage
 
 # Bibliography
-**Must include bibliography**
 
-1. Homebrew Beer Recipes: Browse 200,000+ at Brewer's Friend. Brewer's Friend Beer Brewing Software. (2021). https://www.brewersfriend.com/homebrew-recipes/. 
+1. Bojar, D. (2019, January 5). Generating Novel Cocktail Recipes with a Specific Style through Recurrent Neural Networks. Medium. https://towardsdatascience.com/generating-novel-cocktail-recipes-with-a-specific-style-through-recurrent-neural-networks-4339e9168404.
 
-2. BrewingTV, (2015, August 20), All-Grain Brewing 101: The Basics
+2. Brewing For Beginners - Brewer's Friend. Brewer's Friend | Brewer's Friend is a complete homebrew beer recipe designer with brewing calculators, brew day planner, journal &amp; more. Helping you brew your best, every time! (2019, September 18). https://www.brewersfriend.com/brewing-for-beginners/.
+
+3. BrewingTV, (2015, August 20), All-Grain Brewing 101: The Basics
 [Video]. YouTube. https://www.youtube.com/watch?v=AcRXjdlcvKY
 
-3. How to Brew in a Bag (BIAB). (2021) Homebrew Supply. https://homebrewsupply.com/learn/how-to-brew-in-a-bag-biab/. 
+4. Britz, D. (2016, July 8). Recurrent Neural Networks Tutorial, Part 1 – Introduction to RNNs. WildML. http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/.
 
-4. Brewing For Beginners - Brewer's Friend. Brewer's Friend | Brewer's Friend is a complete homebrew beer recipe designer with brewing calculators, brew day planner, journal &amp; more. Helping you brew your best, every time! (2019, September 18). https://www.brewersfriend.com/brewing-for-beginners/. 
+5. Homebrew Beer Recipes: Browse 200,000+ at Brewer's Friend. Brewer's Friend Beer Brewing Software. (2021). https://www.brewersfriend.com/homebrew-recipes/.
 
-5. Britz, D. (2016, July 8). Recurrent Neural Networks Tutorial, Part 1 – Introduction to RNNs. WildML. http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/. 
+6. How to Brew in a Bag (BIAB). (2021) Homebrew Supply. https://homebrewsupply.com/learn/how-to-brew-in-a-bag-biab/.
 
-6. Bojar, D. (2019, January 5). Generating Novel Cocktail Recipes with a Specific Style through Recurrent Neural Networks. Medium. https://towardsdatascience.com/generating-novel-cocktail-recipes-with-a-specific-style-through-recurrent-neural-networks-4339e9168404. 
+7. Pascanu, R., Gulcehre, C., Cho, K., Bengio, Y. (2014) How to Construct Deep Recurrent Neural Networks. Department of Information and Computer Sience, Aalto University School of Medicine.
 
-7. Trekhleb, O. (2020, July). Generating cooking recipes using TensorFlow and LSTM Recurrent Neural Network: A step-by-step guide. KDnuggets. https://www.kdnuggets.com/2020/07/generating-cooking-recipes-using-tensorflow.html. 
+8. Sutskever, I. (2013) Training Recurrent Neural Networks. Graduate Department of Computer Science, University of Toronto.
 
-8. Pascanu, R., Gulcehre, C., Cho, K., Bengio, Y. (2014) How to Construct Deep Recurrent Neural Networks. Department of Information and Computer Sience, Aalto University School of Medicine.
-
-9. Sutskever, I. (2013) Training Recurrent Neural Networks. Graduate Department of Computer Science, University of Toronto.
+9. Trekhleb, O. (2020, July). Generating cooking recipes using TensorFlow and LSTM Recurrent Neural Network: A step-by-step guide. KDnuggets. https://www.kdnuggets.com/2020/07/generating-cooking-recipes-using-tensorflow.html.

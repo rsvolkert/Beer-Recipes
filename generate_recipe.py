@@ -135,3 +135,5 @@ def generate_combos(model, NAME, STYLE, METHOD, temperatures):
     print('---------------------------')
     print(generated_recipe.strip('#'))
     print('###########################\n')    
+    
+generate_combos(simplified, 'Outlet IPA', 'American IPA', 'All Grain')
