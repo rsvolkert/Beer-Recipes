@@ -3,9 +3,8 @@ import pandas as pd
 import tensorflow as tf
 
 recipes = pd.read_csv('Data/recipes.csv')
-instructions = [recipe for recipe in recipes['recipe']]
 
-MAX_LEN = max([len(instruction) for instruction in instructions])
+MAX_LEN = max([len(recipe) for recipe in recipes['recipe']])
 
 STOP = '#'
 STOP_NAME = 'NAME'
@@ -122,6 +121,8 @@ INGREDIENTS
 def generate_combos(model, NAME, STYLE, METHOD, temperatures):
   recipe_length = MAX_LEN
   
+  return_str = ''
+  
   for temperature in temperatures:
     generated_recipe = generate_recipe(
         model,
@@ -131,9 +132,10 @@ def generate_combos(model, NAME, STYLE, METHOD, temperatures):
         num_generate=recipe_length,
         temperature=temperature
     )
-    print(f'Attempt: {NAME} + {temperature}')
-    print('---------------------------')
-    print(generated_recipe.strip('#'))
-    print('###########################\n')    
     
-generate_combos(simplified, 'Outlet IPA', 'American IPA', 'All Grain', [1.0, 0.8, 0.4, 0.2])
+    return_str = return_str + f"""Attempt: {NAME} + {temperature}
+---------------------------
+{generated_recipe.strip('#')}
+###########################\n"""
+
+  return return_str
