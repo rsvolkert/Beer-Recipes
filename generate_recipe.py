@@ -3,8 +3,8 @@ import pandas as pd
 import tensorflow as tf
 
 recipes = pd.read_csv('Data/recipes.csv')
-
-MAX_LEN = max([len(recipe) for recipe in recipes['recipe']])
+instructions = [recipe for recipe in recipes['recipe']]
+MAX_LEN = max([len(instruction) for instruction in instructions])
 
 STOP = '#'
 STOP_NAME = 'NAME'
