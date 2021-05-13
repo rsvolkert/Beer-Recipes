@@ -1,0 +1,75 @@
+Attempt: Outlet IPA + 0.2
+---------------------------
+NAME
+Outlet IPA
+
+STYLE
+American IPA
+
+METHOD
+All Grain 
+
+INGREDIENTS
+    
+    FERMENTABLES 
+		3 lb American - Pale 2-Row
+		1 lb American - Caramel / Crystal 20L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+		0.50 lb American - Caramel / Crystal 120L
+
+	HOPS
+		1.50 oz Columbus, Pellet, Boil, 60 min
+		1 oz Citra, Pellet, Boil, 15 min
+		1 oz Citra, Pellet, Boil, 10 min
+		1 oz Citra, Pellet, Boil, 5 min
+		1 oz Citra, Pellet, Boil, 1 min
+		3 oz Citra, Pellet, Dry Hop, 13 days
+		3 oz Citra, Pellet, Dry Hop, 14 days
+
+	OTHER
+		1 tsp Irish Moss, Fining, Boil, 15 min.
+
+	YEAST
+		Wyeast - American Ale 1056
+
+INSTRUCTIONS
+Santize any equipment that will be in contact with the brew after the boil process. This is very important as we do not want to introduce foreign bacteria to the brew. Brewing santitizer is widely avaialble and labeled with instructions.
+
+1. THE MASH
+   Start by milling your grain.
+   Heat 1.3 quarts of water for every pound of grain to 145-162 degrees, and add it to the mash tun. Add 10 g Calcium Chloride, 1.50 g Epsom Salt, 7 g Gypsum,  and 1 tsp Lactic acid.
+   Add the grains and stir to make sure that there are no clumps. Make sure that the mash reaches a temperature of 148-158 degrees.
+   Allow the mash to rest for about one hour.
+   After the rest, raise the mash temperature to 170 degrees by adding near boiling water. Stir well. Leave the mash for another 10 minutes.
+   Begin heating the sparge water to 175 degrees.
+   Recirculate the mash by siphoning it between two containers and pouring them back down the sides of the mash tun until the wort appears clear.
+    Disperse the sparge water over the top of the grain bed while siphoning the wort into the boil kettle at equal rates (1 quart per minute) until you reach 7.5 gallons.
+2. THE BOIL
+Bring the wort to a rolling boil. Hold there for 60 min.
+   With 60 min left, Boil 1 oz of Columbus hops.
+   With 10 min left, Boil 1 oz of Citra hops.
+   With 10 min left, Boil 1 oz of Citra hops.
+   With 5 min left, Boil 1 oz of Citra hops.
+   With 1 min left, Boil 1 oz of Citra hops.3. THE CHILL
+   Chill the wort to around room tempterature. The method for this depends on your volume.
+4. FERMENTATION
+   Pour the wort into your fermentation vessel. Add water to reach 5.5 gallons Agitate the mixture to bring oxygen into the wort.
+   Add your Wyeast - London Ale III 1318 to the wort, following the instructions given by the yeast manufacturer.
+   Cover your fermenter, fill the airlock to the line with water, and place the airlock in hole in the fermenter lid.
+   Fermentation times vary by style of beer. Make sure that you are fermenting for enough time.
+   With 5 days left, Dry Hop 1 oz of Citra hops.
+   With 3 days left, Dry Hop 1 oz of Citra hops.
+   With 3 days left, Dry Hop 1 oz of Citra hops.
+   With 3 days left, Dry Hop 1 oz of Citra hops.
+   With 3 days left, Dry Hop 1 oz of Mosaic hops.
+   With 3 days left, Dry Hop 1 oz of Citra hops.
+   With 3 days left, Dry Hop 1 oz of Mosaic hops.
+5. SERVING VESSEL
+   You can choose to bottle or keg your beer. Carbonation instructions vary by choice, so make sure you are equipped to carbonate.
+6. ENJOY!
+###########################

@@ -1,0 +1,54 @@
+Attempt: Outlet IPA + 0.2
+---------------------------
+NAME
+Outlet IPA
+
+STYLE
+American IPA
+
+METHOD
+Extract 
+
+INGREDIENTS
+    
+    FERMENTABLES 
+		10 lb American - Pale 2-Row
+		3 lb American - Wheat
+		1 lb American - Caramel / Crystal 10L
+		0.50 lb American - Carapils (Dextrine Malt)
+
+	HOPS
+		1 oz Cascade, Pellet, Boil, 60 min
+		0.50 oz Cascade, Pellet, Boil, 30 min
+		0.50 oz Cascade, Pellet, Boil, 15 min
+		0.50 oz Cascade, Pellet, Boil, 5 min
+
+	OTHER
+		1 tsp Irish Moss, Fining, Boil, 15 min.
+
+	YEAST
+		Wyeast - American Ale 1056
+
+INSTRUCTIONS
+Santize any equipment that will be in contact with the brew after the boil process. This is very important as we do not want to introduce foreign bacteria to the brew. Brewing santitizer is widely avaialble and labeled with instructions.
+ 
+ 1. THE MASH
+   Heat 7.5 gallons of water to about 160 degrees in your brew kettle.
+   Add your grains to your grain bag.
+   Once the water reaches the desired temperature, add the grains to the water, and turn off the heat. Stir gently to remove clumping, and cover with a lid.
+   Monitor the heat, making sure that it does not get too low.
+   After about 60 minutes, slowly remove the bag from the wort, letting it drain into the kettle.
+2. THE BOIL
+Bring the wort to a rolling boil. Hold there for 60 min.
+   With 60 min left, Boil 0.50 oz of Columbus hops.
+   With 10 min left, Boil 1 oz of Cascade hops.3. THE CHILL
+   Chill the wort to around room tempterature. The method for this depends on your volume.
+4. FERMENTATION
+   Pour the wort into your fermentation vessel. Add water to reach 5.5 gallons Agitate the mixture to bring oxygen into the wort.
+   Add your Wyeast - American Ale 1056 to the wort, following the instructions given by the yeast manufacturer.
+   Cover your fermenter, fill the airlock to the line with water, and place the airlock in hole in the fermenter lid.
+   Fermentation times vary by style of beer. Make sure that you are fermenting for enough time.
+5. SERVING VESSEL
+   You can choose to bottle or keg your beer. Carbonation instructions vary by choice, so make sure you are equipped to carbonate.
+6. ENJOY!
+###########################
