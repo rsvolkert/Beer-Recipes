@@ -84,7 +84,7 @@ simplified = build_model(
 simplified.set_weights(model.get_weights())
 simplified.build(tf.TensorShape([simple_size, None]))
 
-def generate_recipe(model, NAME, STYLE, METHOD, num_generate=1000, temperature=1.0):
+def generate_recipes(model, NAME, STYLE, METHOD, num_generate=1000, temperature=1.0):
   padded_start_string = f"""{STOP_NAME}
 {NAME}
 
@@ -123,17 +123,17 @@ def generate_combos(model, NAME, STYLE, METHOD, temperatures):
   
   return_str = ''
   
-  for temperature in temperatures:
-    generated_recipe = generate_recipe(
+  for temp in temperatures:
+    generated_recipe = generate_recipes(
         model,
         NAME,
         STYLE,
         METHOD,
         num_generate=recipe_length,
-        temperature=temperature
+        temperature=temp
     )
     
-    return_str = return_str + f"""Attempt: {NAME} + {temperature}
+    return_str = return_str + f"""Attempt: {NAME} + {temp}
 ---------------------------
 {generated_recipe.strip('#')}
 ###########################\n"""
